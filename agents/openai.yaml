@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bootstrap AI-Native Project"
+  short_description: "Create an agent-ready project scaffold"
+  default_prompt: "Use $bootstrap-ai-native-project to create an AI-native project scaffold in the current workspace."
