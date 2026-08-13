@@ -1,67 +1,74 @@
 ---
 name: bootstrap-ai-native-project
-description: Create an AI-native project scaffold with README, AGENTS, DESIGN, neutral specs, local project skills, design contracts, and tests; use when asked to bootstrap, initialize, scaffold, or reset an agent-ready project structure.
+description: Create a safe AI-native project scaffold or analyze an existing repository for agentic alignment. Use when asked to bootstrap, initialize, scaffold, reset, adopt, audit, or align an agent-ready project structure. For existing repositories, inventory and archive current agentic artifacts, acquire every decision-relevant connected context, and produce an evidence-backed recommendation without applying changes.
 ---
 
 # Bootstrap AI-Native Project
 
-## Overview
+Choose one workflow before acting:
 
-Use this skill to create the baseline project structure for an AI-native codebase. The scaffold is intentionally domain-neutral: it creates reusable spec templates, local agent skills, design contracts, and project operating docs without fake product examples.
+- **Create:** Generate the complete scaffold in a new or intentionally reset target.
+- **Align:** Analyze an existing project, preserve its agentic artifacts, resolve connected context, and recommend a non-destructive alignment.
 
-## Quick Start
+Never use the create workflow or `--force` as a substitute for alignment.
 
-Run the bundled script from this skill directory:
+## Create
+
+From this skill directory:
 
 ```bash
 python3 scripts/bootstrap_ai_native_project.py <target_dir> --project-name "Project Name"
 ```
 
-Useful options:
+1. Resolve the target. Default to the current workspace only when none is named.
+2. Use `--dry-run` when the target may contain files. It performs the same preflight and reports the same collisions as execution.
+3. Run without `--force` normally. Use `--force` only when the user explicitly authorized replacement of scaffold-managed ordinary files.
+4. Treat a symlinked target root or symlink along a managed destination as a hard error.
+5. Report every created, skipped, or overwritten path.
+6. Capture the first outcome, relevant sources, action boundaries, checkpoint, and stop or return condition.
 
-- `--dry-run`: Show what would be created without writing files.
-- `--force`: Overwrite existing scaffold files intentionally.
-- `--project-name NAME`: Use a display name in generated starter content.
+Do not invent a runtime, token source, package manager, or test command. Record a missing prerequisite in current state and stop or return for a project decision.
 
-## Workflow
+Read `references/scaffold-contract.md` before changing the generator, generated templates, path rules, or output structure.
 
-1. Resolve the target directory from the user's request. Default to the current workspace only when the user does not name a target.
-2. Run `--dry-run` first if the target may contain existing files.
-3. Run the script without `--force` for normal creation. If it reports skipped existing files, ask before rerunning with `--force` unless the user already requested replacement.
-4. After creation, report the generated path and summarize any skipped or overwritten files.
-5. If the user asks to change the scaffold contract, read `references/scaffold-contract.md` before editing the script.
+## Align
 
-## Output Contract
+Read `references/alignment-contract.md` completely before inspecting or recommending changes to an existing repository.
 
-The script creates this structure:
-
-```text
-README.md
-AGENTS.md
-DESIGN.md
-specs/feature-spec.md
-specs/interface-contract.md
-skills/build-page/SKILL.md
-skills/build-page/examples.md
-skills/refactor-component/SKILL.md
-skills/refactor-component/checks.md
-skills/write-tests/SKILL.md
-contracts/design-tokens.schema.json
-contracts/component-rules.json
-tests/
+```bash
+python3 scripts/inspect_existing_project.py <target> --format markdown
 ```
 
-The `specs/` files are templates, not sample product specs. Keep them neutral unless the user explicitly asks for project-specific starter examples.
+After explicit archive authorization:
 
-## Edge Cases
+```bash
+python3 scripts/inspect_existing_project.py <target> --format json --archive-dir <disjoint_archive_path>
+```
 
-- If the target directory does not exist, the script creates it.
-- If scaffold files already exist, the script skips them unless `--force` is set.
-- If the user asks for a different spec naming scheme, preserve the neutral template intent unless they explicitly want examples.
-- If the generated contracts need to change, keep them valid JSON and update `references/scaffold-contract.md` with the new contract shape.
+1. Inventory the repository without mutating it or writing elsewhere. Omit `--archive-dir` for this default phase.
+2. With explicit archive authorization, rerun with a named `--archive-dir` and verify the non-destructive archive outside the source tree.
+3. Identify every decision-relevant connected context and request its content, authority, owner, and freshness.
+4. Do not recommend an alignment until each required context is acquired, explicitly unavailable, or waived by the user.
+5. Classify evidence and proposals as `adopt`, `link`, `create`, `patch`, or `defer`.
+6. Stop after the evidence-backed recommendation. Applying any change requires a later, separate approval of the exact diff.
+
+The inspector has no apply mode. Do not edit, move, merge, rename, or delete source artifacts during alignment.
+
+## Context Model
+
+Treat these as semantic roles, not mandatory filenames or locations:
+
+- Stable instructions and intent
+- Mutable current state
+- Context and authority map
+- Decision history
+
+In create mode, the scaffold supplies conventional files for these roles. In align mode, map and preserve the project's existing sources; do not reconstruct old decisions or automatically merge their meaning.
 
 ## Resources
 
 - `scripts/bootstrap_ai_native_project.py`: Deterministic scaffold generator.
-- `scripts/install_skill.py`: Local installer for copying this skill repo into the Codex skills directory.
-- `references/scaffold-contract.md`: Structure and content contract for maintaining the generator.
+- `scripts/inspect_existing_project.py`: Read-only repository inventory and external archive tool.
+- `scripts/install_skill.py`: Installer for the Codex skills directory.
+- `references/scaffold-contract.md`: Create-mode structure and safety contract.
+- `references/alignment-contract.md`: Existing-project evidence, archival, context, and recommendation contract.
